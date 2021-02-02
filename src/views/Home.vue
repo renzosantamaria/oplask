@@ -1,18 +1,34 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <search-box @fetchImages="fetch" />
+    <gallery />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Gallery from '../components/Gallery.vue'
+import SearchBox from '../components/SearchBox.vue'
+import * as Api from "@/api/";
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    SearchBox,
+    Gallery
+
+  },
+  data(){
+    return{
+      imageArray: []
+    }
+  },
+  methods:{
+    async fetch(phrase){
+      const data = await Api.fetchImages(phrase)
+      // console.log(phrase)
+      this.imageArray = data.results
+      console.log(this.imageArray)
+    }
   }
 }
 </script>
