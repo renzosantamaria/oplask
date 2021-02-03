@@ -1,34 +1,40 @@
 <template>
   <div class="home">
     <search-box @fetchImages="fetch" />
-    <gallery />
+    <gallery :images="imageArray" @fetchNewPage="fetch" />
   </div>
 </template>
 
 <script>
-import Gallery from '../components/Gallery.vue'
-import SearchBox from '../components/SearchBox.vue'
-import * as Api from "@/api/";
+import Gallery from "../components/Gallery.vue";
+import SearchBox from "../components/SearchBox.vue";
+import * as Api from "@/api";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     SearchBox,
-    Gallery
+    Gallery,
+  },
+  data() {
+    return {
+      imageArray: [],
+    };
+  },
+  methods: {
+    async fetch() {
+      this.$root.isLoading = true;
+      const data = await Api.fetchImages(
+        this.$root.searchPhrase,
+        this.$root.page
+      );
 
+      this.imageArray = data.results;
+      this.$root.totalPages = data.total_pages;
+
+      this.$root.isLoading = false;
+      console.log(this.imageArray);
+    },
   },
-  data(){
-    return{
-      imageArray: []
-    }
-  },
-  methods:{
-    async fetch(phrase){
-      const data = await Api.fetchImages(phrase)
-      // console.log(phrase)
-      this.imageArray = data.results
-      console.log(this.imageArray)
-    }
-  }
-}
+};
 </script>
