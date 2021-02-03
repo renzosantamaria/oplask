@@ -11,7 +11,7 @@ new Vue({
     return {
       isLoading: false,
       page: 1,
-      totalPages: 0,
+      totalPages: 1,
       searchPhrase: "",
     };
   },

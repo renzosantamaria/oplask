@@ -16,21 +16,20 @@ export default {
   data() {
     return {
       errorText: false,
-    };
+    }
   },
   methods: {
     emitSearch() {
-      // console.log(this.searchPhrase)
-      // this.searchPhrase = ''
+      this.$root.page = 1
       if (this.$root.searchPhrase.length > 2) {
-        this.errorText = false;
-        this.$emit("fetchImages");
+        this.errorText = false
+        this.$emit('fetchImages')
       } else {
-        this.errorText = true;
+        this.errorText = true
       }
     },
   },
-};
+}
 </script>
 
 <style></style>

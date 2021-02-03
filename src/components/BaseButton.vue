@@ -5,13 +5,13 @@
 </template>
 
 <script>
-export default {
-}
+export default {}
 </script>
 
 <style scoped>
-  button{
-    padding: 1rem 2rem;
-    border-radius: 8px;
-  }
+button {
+  cursor: pointer;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+}
 </style>

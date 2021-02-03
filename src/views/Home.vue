@@ -6,35 +6,37 @@
 </template>
 
 <script>
-import Gallery from "../components/Gallery.vue";
-import SearchBox from "../components/SearchBox.vue";
-import * as Api from "@/api";
+import Gallery from '../components/Gallery.vue'
+import SearchBox from '../components/SearchBox.vue'
+import * as Api from '@/api'
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
     SearchBox,
     Gallery,
   },
+  created() {
+    this.$root.page = 1
+  },
   data() {
     return {
       imageArray: [],
-    };
+    }
   },
   methods: {
     async fetch() {
-      this.$root.isLoading = true;
+      this.$root.isLoading = true
       const data = await Api.fetchImages(
         this.$root.searchPhrase,
         this.$root.page
-      );
+      )
 
-      this.imageArray = data.results;
-      this.$root.totalPages = data.total_pages;
+      this.imageArray = data.results
+      this.$root.totalPages = data.total_pages
 
-      this.$root.isLoading = false;
-      console.log(this.imageArray);
+      this.$root.isLoading = false
     },
   },
-};
+}
 </script>

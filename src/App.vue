@@ -2,7 +2,7 @@
   <div id="app">
     <header>
       <h1>OPLASK</h1>
-      <router-link v-if="homeView" to="/favorites"
+      <router-link v-if="homeView" to="/favorite"
         ><base-button>Favorites</base-button></router-link
       >
       <router-link v-else to="/"><base-button>Home</base-button></router-link>
@@ -11,14 +11,13 @@
   </div>
 </template>
 <script>
-// import {  } from "module";
 export default {
   computed: {
     homeView() {
-      return this.$route.path === "/";
+      return this.$route.path === '/'
     },
   },
-};
+}
 </script>
 <style lang="scss">
 * {
