@@ -1,5 +1,12 @@
 <template>
   <section>
+    <LightBox
+      v-if="showModal"
+      @closeModal="hideLightbox"
+      :image="currentImage"
+      @showPreviousModalImage="decreaseIndex"
+      @showNextModalImage="increaseIndex"
+    />
     <div class="gallery-wrapper">
       <img
         class="arrow"
@@ -15,8 +22,8 @@
           v-for="(image, index) in images"
           :key="image.id"
           :src="image.urls.thumb"
-          alt="pictures"
-          @click="showLightbox(image, index)"
+          :alt="image.alt_description"
+          @click="showLightbox(index)"
         />
       </div>
       <img
@@ -31,9 +38,11 @@
 </template>
 
 <script>
-import PreLoader from "./PreLoader.vue";
+import PreLoader from './PreLoader.vue'
+import LightBox from './LightBox'
+
 export default {
-  components: { PreLoader },
+  components: { PreLoader, LightBox },
   props: {
     images: {
       type: Array,
@@ -41,45 +50,69 @@ export default {
   },
   computed: {
     isLoading() {
-      return this.$root.isLoading;
+      return this.$root.isLoading
     },
     arrayLength() {
-      return this.images.length;
+      return this.images.length
     },
+    currentImage() {
+      return this.images[this.currentIndex]
+    },
+  },
+  data() {
+    return {
+      currentIndex: 0,
+      showModal: false,
+    }
   },
   methods: {
     previousPage() {
       if (this.$root.page > 1) {
-        this.$root.page--;
-        console.log("prev");
-        this.$emit("fetchNewPage");
+        this.$root.page--
+        this.$emit('fetchNewPage')
+      }
+    },
+    decreaseIndex() {
+      if (this.currentIndex > 0) {
+        this.currentIndex--
+      }
+    },
+    increaseIndex() {
+      if (this.currentIndex < 8) {
+        this.currentIndex++
       }
     },
     nextPage() {
       if (this.$root.page < this.$root.totalPages) {
-        this.$root.page++;
-        console.log("next");
-        this.$emit("fetchNewPage");
+        this.$root.page++
+        console.log('next')
+        this.$emit('fetchNewPage')
       }
     },
-    showLightbox(img, i) {
-      console.log(img, i);
+    hideLightbox() {
+      this.showModal = false
+      document.body.style.overflow = 'scroll'
+    },
+    showLightbox(i) {
+      this.currentIndex = i
+      this.showModal = true
+      window.scrollTo(0, 0)
+      document.body.style.overflow = 'hidden'
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
 .wrapper {
   display: flex;
-  width: 80%;
+  width: 90%;
   flex-wrap: wrap;
-
   justify-content: center;
   align-items: center;
 
   img {
-    width: 300px;
+    width: 250px;
     height: 200px;
     object-fit: cover;
     margin: 1rem;
@@ -92,6 +125,7 @@ export default {
   justify-content: center;
 
   .arrow {
+    cursor: pointer;
     width: 2rem;
   }
 }
