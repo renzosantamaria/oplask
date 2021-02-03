@@ -5,8 +5,31 @@ export async function fetchImages(phrase, page) {
     `${BASE_URL}page=${page}&query=${phrase}&per_page=9`
   );
   const data = await request.json();
-  console.log(data);
   return data;
 }
 
-// https://api.unsplash.com/photos/?client_id=YOUR_ACCESS_KEY
+export function getFavorites() {
+  const favorites = localStorage.getItem('favorites')
+  return JSON.parse(favorites)
+}
+
+export function setFavorite(image) {
+  let favorites = getFavorites()
+
+  if (favorites) {
+    let duplicate = false
+    favorites.forEach(favorite => {
+      if (favorite.id == image.id) {
+        duplicate = true
+      }
+    })
+    if (!duplicate) {
+      favorites.push(image)
+    }
+
+  } else {
+    favorites = []
+    favorites.push(image)
+  }
+  localStorage.setItem('favorites', JSON.stringify(favorites))
+}
