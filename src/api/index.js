@@ -33,3 +33,18 @@ export function setFavorite(image) {
   }
   localStorage.setItem('favorites', JSON.stringify(favorites))
 }
+
+export async function saveImage(img, searchphrase) {
+  const request = await fetch(img.urls.full)
+  const blob = await request.blob()
+
+  const fileLink = document.createElement('a')
+  fileLink.href = URL.createObjectURL(blob)
+  fileLink.setAttribute('download', `${searchphrase}.jpg`)
+
+  document.body.appendChild(fileLink)
+  fileLink.click()
+
+  fetch(`${img.links.download_location}?client_id=${process.env.VUE_APP_CLIENTID}`)
+  URL.revokeObjectURL(fileLink.href)
+}
