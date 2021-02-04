@@ -16,6 +16,7 @@
       />
 
       <div ref="image" class="image-wrapper">
+        <PreLoader />
         <img
           ref="image"
           class="lightbox-image"
@@ -57,10 +58,11 @@
 
 <script>
 import BaseButton from './BaseButton.vue'
+import PreLoader from './PreLoader'
 import * as API from '../api'
 
 export default {
-  components: { BaseButton },
+  components: { BaseButton, PreLoader },
   props: {
     image: Object,
   },
@@ -95,6 +97,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$ipad-cutoff: 770px;
+$mobile-cutoff: 542px;
+
 .image-modal {
   align-items: center;
   background-color: rgba(0, 0, 0, 0.9);
@@ -114,26 +119,57 @@ export default {
     position: absolute;
     top: 2rem;
     right: 2rem;
+
+    @media screen and (max-width: $ipad-cutoff) {
+      top: 1rem;
+      right: 1rem;
+    }
   }
 
   .outer-wrapper {
     align-items: center;
     display: flex;
 
+    .image-wrapper {
+      @media screen and (max-width: $ipad-cutoff) {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+        justify-content: center;
+      }
+    }
+
     .lightbox-image {
       height: 30rem;
       width: auto;
       margin: 0 3rem;
+
+      @media screen and (max-width: $ipad-cutoff) {
+        height: auto;
+        max-height: 100%;
+        width: 85%;
+        margin: 0 1rem;
+        overflow: hidden;
+        object-fit: contain;
+      }
     }
 
     .arrow {
       fill: #fff;
+      @media screen and (max-width: $ipad-cutoff) {
+        padding: 0 1rem;
+      }
     }
 
     nav {
       display: flex;
       justify-content: space-between;
       margin: 1rem 3rem;
+
+      @media screen and (max-width: $ipad-cutoff) {
+        width: 85%;
+      }
 
       img {
         max-width: 3rem;

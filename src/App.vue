@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <header>
-      <h1>OPLASK</h1>
+      <router-link to="/">
+        <h1>OPLASK</h1>
+      </router-link>
+
       <router-link v-if="homeView" to="/favorite"
         ><base-button>Favorites</base-button></router-link
       >
@@ -21,6 +24,8 @@ export default {
 </script>
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
+$ipad-cutoff: 770px;
+$mobile-cutoff: 542px;
 
 * {
   margin: 0;
@@ -40,6 +45,11 @@ body {
   padding: 2rem;
   background-color: white;
 
+  @media screen and (max-width: $ipad-cutoff) {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
   header {
     background-color: #f8f8f8;
     margin: 2rem 0;
@@ -47,6 +57,10 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 2rem;
+
+    @media screen and (max-width: $ipad-cutoff) {
+      margin: 0 0 2rem;
+    }
 
     h1 {
       font-size: 2rem;

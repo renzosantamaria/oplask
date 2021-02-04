@@ -1,16 +1,18 @@
 <template>
   <section>
-    <LightBox
-      v-if="showModal"
-      @closeModal="hideLightbox"
-      :image="currentImage"
-      @showPreviousModalImage="decreaseIndex"
-      @showNextModalImage="increaseIndex"
-    />
+    <transition name="modal">
+      <LightBox
+        v-if="showModal"
+        @closeModal="hideLightbox"
+        :image="currentImage"
+        @showPreviousModalImage="decreaseIndex"
+        @showNextModalImage="increaseIndex"
+      />
+    </transition>
     <div class="gallery-wrapper">
       <img
         class="arrow"
-        v-if="arrayLength"
+        v-if="arrayLength && this.$root.totalPages > 1"
         src="@/assets/left-arrow.svg"
         alt="left arrow"
         @click="previousPage"
@@ -28,7 +30,7 @@
       </div>
       <img
         class="arrow"
-        v-if="arrayLength"
+        v-if="arrayLength && this.$root.totalPages > 1"
         src="@/assets/right-arrow.svg"
         alt="right arrow"
         @click="nextPage"
@@ -85,7 +87,6 @@ export default {
     nextPage() {
       if (this.$root.page < this.$root.totalPages) {
         this.$root.page++
-        console.log('next')
         this.$emit('fetchNewPage')
       }
     },
@@ -104,19 +105,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-  display: flex;
-  width: 90%;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+$ipad-cutoff: 770px;
+$mobile-cutoff: 542px;
 
-  img {
-    width: 250px;
-    height: 200px;
-    object-fit: cover;
-    margin: 1rem;
-  }
+.modal-enter,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.5s;
+}
+
+.modal-enter-to,
+.modal-leave {
+  opacity: 1;
 }
 
 .gallery-wrapper {
@@ -124,9 +128,34 @@ export default {
   margin: 3rem 0;
   justify-content: center;
 
+  .wrapper {
+    display: flex;
+    width: 90%;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 30%;
+      height: 13rem;
+      object-fit: cover;
+      margin: 0.5rem;
+
+      @media screen and (max-width: $mobile-cutoff) {
+        width: 28%;
+        height: 8rem;
+        margin: 5px;
+      }
+    }
+  }
+
   .arrow {
     cursor: pointer;
     width: 2rem;
+
+    @media screen and (max-width: $mobile-cutoff) {
+      width: 1rem;
+    }
   }
 }
 </style>

@@ -9,6 +9,9 @@ Vue.component("BaseButton", BaseButton);
 new Vue({
   data() {
     return {
+      currentSearchResults: [],
+      searchTotalPages: 1,
+      searchPage: 1,
       isLoading: false,
       page: 1,
       totalPages: 1,

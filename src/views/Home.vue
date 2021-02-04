@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <search-box @fetchImages="fetch" />
-    <gallery :images="imageArray" @fetchNewPage="fetch" />
+    <gallery :images="$root.currentSearchResults" @fetchNewPage="fetch" />
   </div>
 </template>
 
@@ -18,6 +18,10 @@ export default {
   },
   created() {
     this.$root.page = 1
+    if (this.$root.currentSearchResults.length) {
+      this.$root.totalPages = this.$root.searchTotalPages
+      this.$root.page = this.$root.searchPage
+    }
   },
   data() {
     return {
@@ -32,9 +36,10 @@ export default {
         this.$root.page
       )
 
-      this.imageArray = data.results
+      this.$root.currentSearchResults = data.results
       this.$root.totalPages = data.total_pages
-
+      this.$root.searchTotalPages = this.$root.totalPages
+      this.$root.searchPage = this.$root.page
       this.$root.isLoading = false
     },
   },

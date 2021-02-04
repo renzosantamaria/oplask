@@ -33,10 +33,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input {
-  border: none;
-  box-shadow: 2px 2px 5px rgba(180, 180, 180, 0.7);
-  padding: 0.5rem 1.5rem;
-  margin-right: 0.5rem;
+$ipad-cutoff: 770px;
+$mobile-cutoff: 542px;
+
+section {
+  max-width: 84%;
+  margin: auto;
+
+  @media screen and (max-width: $mobile-cutoff) {
+    max-width: 100%;
+  }
+
+  input {
+    border: none;
+    box-shadow: 2px 2px 5px rgba(180, 180, 180, 0.7);
+    padding: 0.5rem 1.5rem;
+    margin-right: 0.5rem;
+  }
 }
 </style>
