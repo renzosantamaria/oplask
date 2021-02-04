@@ -20,14 +20,18 @@ export default {
 }
 </script>
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  outline-color: #000;
 }
 body {
   font-size: 62.5%;
   background-color: rgb(243, 243, 243);
+  font-family: 'Roboto', sans-serif;
 }
 #app {
   margin: 0 auto;
@@ -35,11 +39,15 @@ body {
   min-height: 100vh;
   padding: 2rem;
   background-color: white;
+
   header {
+    background-color: #f8f8f8;
     margin: 2rem 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 2rem;
+
     h1 {
       font-size: 2rem;
     }
