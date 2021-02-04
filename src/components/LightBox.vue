@@ -37,7 +37,12 @@
             src="@/assets/favorite-filled.svg"
             alt="Favorite Heart"
           />
-          <base-button ref="image">Download image</base-button>
+          <base-button
+            class="download-button"
+            @click.native="saveImage"
+            ref="image"
+            >Download image</base-button
+          >
         </nav>
       </div>
       <img
@@ -69,6 +74,9 @@ export default {
       this.favorite = true
       API.setFavorite(this.image)
     },
+    saveImage() {
+      API.saveImage(this.image, this.$root.searchPhrase)
+    },
     nextImage() {
       this.favorite = false
       this.$emit('showNextModalImage')
@@ -89,7 +97,7 @@ export default {
 <style lang="scss" scoped>
 .image-modal {
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -125,10 +133,15 @@ export default {
     nav {
       display: flex;
       justify-content: space-between;
-      margin: 0 3rem;
+      margin: 1rem 3rem;
 
       img {
         max-width: 3rem;
+      }
+
+      .download-button {
+        background-color: #fff;
+        box-shadow: none;
       }
     }
   }
