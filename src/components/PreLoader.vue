@@ -76,15 +76,14 @@ export default {};
 <style scoped lang="scss">
 .preloader {
   display: flex;
-}
-.preloader {
+  color: peachpuff;
   animation: tiltSpin 8s linear infinite;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: auto;
   width: 17em;
-  height: 17em;
+  height: 30em;
 }
 .preloader,
 .preloader__ring {

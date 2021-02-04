@@ -13,27 +13,32 @@
         class="arrow"
         src="@/assets/left-arrow-white.svg"
         alt="Left arrow"
+        v-show="!showPreloader"
       />
 
       <div ref="image" class="image-wrapper">
-        <PreLoader />
+        <PreLoader v-show="showPreloader" />
         <img
+          v-show="!showPreloader"
           ref="image"
           class="lightbox-image"
           :src="image.urls.regular"
           :alt="image.alt_description"
+          @load="showPreloader = false"
         />
-        <nav>
+        <nav v-show="!showPreloader">
           <img
-            v-if="!favorite"
+            class="heart"
+            v-if="!toggleHeart"
             @click="addToFavorites"
             ref="image"
             src="@/assets/favorite-empty.svg"
             alt="Non-favorite Heart"
           />
           <img
+            class="heart"
             v-else
-            @click="addToFavorites"
+            @click="removeFromFavorites"
             ref="image"
             src="@/assets/favorite-filled.svg"
             alt="Favorite Heart"
@@ -51,15 +56,16 @@
         class="arrow"
         src="@/assets/right-arrow-white.svg"
         alt="Right arrow"
+        v-show="!showPreloader"
       />
     </div>
   </section>
 </template>
 
 <script>
-import BaseButton from './BaseButton.vue'
-import PreLoader from './PreLoader'
-import * as API from '../api'
+import BaseButton from "./BaseButton.vue";
+import PreLoader from "./PreLoader";
+import * as API from "../api";
 
 export default {
   components: { BaseButton, PreLoader },
@@ -68,32 +74,42 @@ export default {
   },
   data() {
     return {
-      favorite: false,
-    }
+      toggleHeart: false,
+      showPreloader: true,
+    };
   },
+  created() {
+    this.toggleHeart = !!API.isFavorite(this.image);
+  },
+  updated() {
+    this.toggleHeart = !!API.isFavorite(this.image);
+  },
+
   methods: {
     addToFavorites() {
-      this.favorite = true
-      API.setFavorite(this.image)
+      this.toggleHeart = !this.toggleHeart;
+      API.setFavorite(this.image);
+    },
+    removeFromFavorites() {
+      this.toggleHeart = !this.toggleHeart;
+      API.removeFavorite(this.image);
     },
     saveImage() {
-      API.saveImage(this.image, this.$root.searchPhrase)
+      API.saveImage(this.image, this.$root.searchPhrase);
     },
     nextImage() {
-      this.favorite = false
-      this.$emit('showNextModalImage')
+      this.$emit("showNextModalImage");
     },
     previousImage() {
-      this.favorite = false
-      this.$emit('showPreviousModalImage')
+      this.$emit("showPreviousModalImage");
     },
     closeModal(e) {
       if (this.$refs.modal == e.target || this.$refs.close == e.target) {
-        this.$emit('closeModal')
+        this.$emit("closeModal");
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -123,6 +139,7 @@ $mobile-cutoff: 542px;
     @media screen and (max-width: $ipad-cutoff) {
       top: 1rem;
       right: 1rem;
+      width: 1.5rem;
     }
   }
 
@@ -130,13 +147,18 @@ $mobile-cutoff: 542px;
     align-items: center;
     display: flex;
 
+    @media screen and (max-width: $ipad-cutoff) {
+      padding: 1rem;
+    }
+
     .image-wrapper {
+      min-height: 50vh;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       @media screen and (max-width: $ipad-cutoff) {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
         max-height: 90vh;
-        justify-content: center;
       }
     }
 
@@ -157,8 +179,8 @@ $mobile-cutoff: 542px;
 
     .arrow {
       fill: #fff;
+      width: 1rem;
       @media screen and (max-width: $ipad-cutoff) {
-        padding: 0 1rem;
       }
     }
 
@@ -166,18 +188,21 @@ $mobile-cutoff: 542px;
       display: flex;
       justify-content: space-between;
       margin: 1rem 3rem;
-
-      @media screen and (max-width: $ipad-cutoff) {
-        width: 85%;
-      }
+      width: 88%;
 
       img {
         max-width: 3rem;
+        cursor: pointer;
       }
 
       .download-button {
         background-color: #fff;
         box-shadow: none;
+
+        @media screen and (max-width: $ipad-cutoff) {
+          font-size: 0.8rem;
+          padding: 0.5rem 1rem;
+        }
       }
     }
   }

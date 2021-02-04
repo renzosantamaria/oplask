@@ -17,13 +17,13 @@
 export default {
   computed: {
     homeView() {
-      return this.$route.path === '/'
+      return this.$route.path === "/";
     },
   },
-}
+};
 </script>
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap");
 $ipad-cutoff: 770px;
 $mobile-cutoff: 542px;
 
@@ -36,7 +36,7 @@ $mobile-cutoff: 542px;
 body {
   font-size: 62.5%;
   background-color: rgb(243, 243, 243);
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 #app {
   margin: 0 auto;
@@ -69,9 +69,6 @@ body {
       text-decoration: none;
       color: black;
     }
-  }
-  p {
-    font-size: 1.6rem;
   }
 }
 </style>

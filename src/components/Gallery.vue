@@ -36,12 +36,15 @@
         @click="nextPage"
       />
     </div>
+    <span v-if="arrayLength"
+      >Page {{ $root.page }} of {{ $root.totalPages }}</span
+    >
   </section>
 </template>
 
 <script>
-import PreLoader from './PreLoader.vue'
-import LightBox from './LightBox'
+import PreLoader from "./PreLoader.vue";
+import LightBox from "./LightBox";
 
 export default {
   components: { PreLoader, LightBox },
@@ -52,56 +55,58 @@ export default {
   },
   computed: {
     isLoading() {
-      return this.$root.isLoading
+      return this.$root.isLoading;
     },
     arrayLength() {
-      return this.images.length
+      return this.images.length;
     },
     currentImage() {
-      return this.images[this.currentIndex]
+      return this.images[this.currentIndex];
     },
   },
+
   data() {
     return {
       currentIndex: 0,
       showModal: false,
-    }
+    };
   },
   methods: {
     previousPage() {
       if (this.$root.page > 1) {
-        this.$root.page--
-        this.$emit('fetchNewPage')
+        this.$root.page--;
+        this.$emit("fetchNewPage");
       }
     },
     decreaseIndex() {
       if (this.currentIndex > 0) {
-        this.currentIndex--
+        this.currentIndex--;
       }
     },
     increaseIndex() {
       if (this.currentIndex < 8) {
-        this.currentIndex++
+        this.currentIndex++;
       }
     },
     nextPage() {
       if (this.$root.page < this.$root.totalPages) {
-        this.$root.page++
-        this.$emit('fetchNewPage')
+        this.$root.page++;
+        this.$emit("fetchNewPage");
       }
     },
     hideLightbox() {
-      this.showModal = false
-      document.body.style.overflow = 'scroll'
+      this.showModal = false;
+      document.body.style.overflow = "scroll";
+      this.$emit("updateFavorites");
     },
     showLightbox(i) {
-      this.currentIndex = i
-      this.showModal = true
-      window.scrollTo(0, 0)
-      document.body.style.overflow = 'hidden'
+      this.currentIndex = i;
+      this.showModal = true;
+      window.scrollTo(0, 0);
+      document.body.style.overflow = "hidden";
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -157,5 +162,11 @@ $mobile-cutoff: 542px;
       width: 1rem;
     }
   }
+}
+
+span {
+  display: block;
+  text-align: center;
+  font-size: 0.9rem;
 }
 </style>
