@@ -19,7 +19,6 @@ export function getFavorites() {
 
 export function isFavorite(image) {
   let favorites = getFavorites();
-  console.log(favorites.find((fav) => fav.id === image.id));
   return favorites.find((fav) => fav.id === image.id);
 }
 

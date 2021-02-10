@@ -11,48 +11,58 @@
 </template>
 
 <script>
-import * as API from "../api";
-import Gallery from "../components/Gallery";
+import * as API from '../api'
+import Gallery from '../components/Gallery'
 export default {
   components: {
     Gallery,
   },
   created() {
-    this.$root.page = 1;
-    this.favorites = API.getFavorites();
+    this.$store.dispatch('setSearchTotalPages', this.totalPages)
+    this.$store.dispatch('setPage', 1)
+    this.favorites = API.getFavorites()
 
     if (this.favorites) {
-      this.$root.totalPages = Math.ceil(this.favorites.length / 9);
-      this.currentFavorites = this.favorites.slice(0, 9);
+      this.$store.dispatch(
+        'setTotalPages',
+        Math.ceil(this.favorites.length / 9)
+      )
+      this.currentFavorites = this.favorites.slice(0, 9)
     }
   },
 
   computed: {
+    page() {
+      return this.$store.getters.getCurrentPage
+    },
+    totalPages() {
+      return this.$store.getters.getTotalPages
+    },
     indexStart() {
-      return this.$root.page * 9 - 9;
+      return this.page * 9 - 9
     },
   },
   data() {
     return {
       favorites: [],
       currentFavorites: [],
-    };
+    }
   },
   methods: {
     setCurrentFavorites() {
       this.currentFavorites = this.favorites.slice(
         this.indexStart,
         this.indexStart + 9
-      );
+      )
     },
     setUpdatedFavorites() {
-      this.favorites = API.getFavorites();
+      this.favorites = API.getFavorites()
       if (this.favorites) {
-        this.$root.totalPages = Math.ceil(this.favorites.length / 9);
-        this.currentFavorites = this.favorites.slice(0, 9);
+        this.totalPages = Math.ceil(this.favorites.length / 9)
+        this.currentFavorites = this.favorites.slice(0, 9)
       }
-      this.setCurrentFavorites();
+      this.setCurrentFavorites()
     },
   },
-};
+}
 </script>

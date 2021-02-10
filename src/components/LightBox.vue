@@ -63,12 +63,17 @@
 </template>
 
 <script>
-import BaseButton from "./BaseButton.vue";
-import PreLoader from "./PreLoader";
-import * as API from "../api";
+import BaseButton from './BaseButton.vue'
+import PreLoader from './PreLoader'
+import * as API from '../api'
 
 export default {
   components: { BaseButton, PreLoader },
+  computed: {
+    searchPhrase() {
+      return this.$store.getters.getSearchPhrase
+    },
+  },
   props: {
     image: Object,
   },
@@ -76,40 +81,40 @@ export default {
     return {
       toggleHeart: false,
       showPreloader: true,
-    };
+    }
   },
   created() {
-    this.toggleHeart = !!API.isFavorite(this.image);
+    this.toggleHeart = !!API.isFavorite(this.image)
   },
   updated() {
-    this.toggleHeart = !!API.isFavorite(this.image);
+    this.toggleHeart = !!API.isFavorite(this.image)
   },
 
   methods: {
     addToFavorites() {
-      this.toggleHeart = !this.toggleHeart;
-      API.setFavorite(this.image);
+      this.toggleHeart = !this.toggleHeart
+      API.setFavorite(this.image)
     },
     removeFromFavorites() {
-      this.toggleHeart = !this.toggleHeart;
-      API.removeFavorite(this.image);
+      this.toggleHeart = !this.toggleHeart
+      API.removeFavorite(this.image)
     },
     saveImage() {
-      API.saveImage(this.image, this.$root.searchPhrase);
+      API.saveImage(this.image, this.searchPhrase)
     },
     nextImage() {
-      this.$emit("showNextModalImage");
+      this.$emit('showNextModalImage')
     },
     previousImage() {
-      this.$emit("showPreviousModalImage");
+      this.$emit('showPreviousModalImage')
     },
     closeModal(e) {
       if (this.$refs.modal == e.target || this.$refs.close == e.target) {
-        this.$emit("closeModal");
+        this.$emit('closeModal')
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -163,6 +168,7 @@ $mobile-cutoff: 542px;
     }
 
     .lightbox-image {
+      cursor: pointer;
       height: 30rem;
       width: auto;
       margin: 0 3rem;
@@ -178,6 +184,7 @@ $mobile-cutoff: 542px;
     }
 
     .arrow {
+      cursor: pointer;
       fill: #fff;
       width: 1rem;
       @media screen and (max-width: $ipad-cutoff) {

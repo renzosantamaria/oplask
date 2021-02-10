@@ -12,7 +12,7 @@
     <div class="gallery-wrapper">
       <img
         class="arrow"
-        v-if="arrayLength && this.$root.totalPages > 1"
+        v-if="arrayLength && totalPages > 1"
         src="@/assets/left-arrow.svg"
         alt="left arrow"
         @click="previousPage"
@@ -30,21 +30,19 @@
       </div>
       <img
         class="arrow"
-        v-if="arrayLength && this.$root.totalPages > 1"
+        v-if="arrayLength && totalPages > 1"
         src="@/assets/right-arrow.svg"
         alt="right arrow"
         @click="nextPage"
       />
     </div>
-    <span v-if="arrayLength"
-      >Page {{ $root.page }} of {{ $root.totalPages }}</span
-    >
+    <span v-if="arrayLength">Page {{ page }} of {{ totalPages }}</span>
   </section>
 </template>
 
 <script>
-import PreLoader from "./PreLoader.vue";
-import LightBox from "./LightBox";
+import PreLoader from './PreLoader.vue'
+import LightBox from './LightBox'
 
 export default {
   components: { PreLoader, LightBox },
@@ -55,13 +53,19 @@ export default {
   },
   computed: {
     isLoading() {
-      return this.$root.isLoading;
+      return this.$store.getters.getIsLoading
     },
     arrayLength() {
-      return this.images.length;
+      return this.images.length
+    },
+    page() {
+      return this.$store.getters.getCurrentPage
+    },
+    totalPages() {
+      return this.$store.getters.getTotalPages
     },
     currentImage() {
-      return this.images[this.currentIndex];
+      return this.images[this.currentIndex]
     },
   },
 
@@ -69,44 +73,59 @@ export default {
     return {
       currentIndex: 0,
       showModal: false,
-    };
+    }
   },
   methods: {
     previousPage() {
-      if (this.$root.page > 1) {
-        this.$root.page--;
-        this.$emit("fetchNewPage");
+      if (this.page > 1) {
+        let newPage = this.page - 1
+        // this.$root.page--
+        this.$store.dispatch('setPage', newPage)
+        // this.$store.dispatch('fetchImages')
+        if (this.$route.path == '/') {
+          this.$store.dispatch('fetchImages')
+        } else {
+          this.$emit('fetchNewPage')
+        }
       }
     },
     decreaseIndex() {
       if (this.currentIndex > 0) {
-        this.currentIndex--;
+        this.currentIndex--
       }
     },
     increaseIndex() {
       if (this.currentIndex < 8) {
-        this.currentIndex++;
+        this.currentIndex++
       }
     },
     nextPage() {
-      if (this.$root.page < this.$root.totalPages) {
-        this.$root.page++;
-        this.$emit("fetchNewPage");
+      if (this.page < this.totalPages) {
+        let newPage = this.page + 1
+        // this.$root.page--
+        this.$store.dispatch('setPage', newPage)
+
+        // this.$root.page++
+        if (this.$route.path == '/') {
+          this.$store.dispatch('fetchImages')
+        } else {
+          this.$emit('fetchNewPage')
+        }
       }
     },
     hideLightbox() {
-      this.showModal = false;
-      document.body.style.overflow = "scroll";
-      this.$emit("updateFavorites");
+      this.showModal = false
+      document.body.style.overflow = 'scroll'
+      this.$emit('updateFavorites')
     },
     showLightbox(i) {
-      this.currentIndex = i;
-      this.showModal = true;
-      window.scrollTo(0, 0);
-      document.body.style.overflow = "hidden";
+      this.currentIndex = i
+      this.showModal = true
+      window.scrollTo(0, 0)
+      document.body.style.overflow = 'hidden'
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -141,6 +160,7 @@ $mobile-cutoff: 542px;
     align-items: center;
 
     img {
+      cursor: pointer;
       width: 30%;
       height: 13rem;
       object-fit: cover;
